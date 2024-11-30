@@ -1,0 +1,48 @@
+services:
+  db:
+    container_name: postgres
+    image: postgres
+    ports:
+      - 3001:5432
+    environment:
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: ramp
+      POSTGRES_USER: postgres
+    volumes:
+      - ./pgdata:/var/lib/postgresql/data
+    restart: always
+
+  backend:
+    container_name: backend
+    build:
+      dockerfile: ./Dockerfile
+      context: ./ramp-backend
+    ports:
+      - 8080:8080
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/ramp
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: postgres
+    depends_on:
+      - db
+    restart: always
+
+  frontend:
+    container_name: frontend
+    build:
+      dockerfile: ./Dockerfile
+      context: ./ramp-frontend
+    ports:
+      - 3000:3000
+    environment:
+      PORT: 3000
+      NODE_ENV: production
+      GENERATE_SOURCEMAP: false
+      REACT_APP_COOKIE_KEYS_PREFIX: _ramp_
+      REACT_APP_AVAILABLE_LANGUAGES: en-UK,en-US,tr-TR
+      REACT_APP_DEFAULT_LANGUAGE: tr-TR
+      REACT_APP_API_URL: http://localhost:8080/api
+    depends_on:
+      - backend
+    restart: always

@@ -1,0 +1,12 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "rootDir": ".",
+    "outDir": "build",
+    "composite": true,
+    "paths": {
+      "@ramp/utils": ["../../utils/*"]
+    }
+  },
+  "include": ["./**/*", "./**/*.json"]
+}

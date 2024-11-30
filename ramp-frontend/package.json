@@ -1,0 +1,61 @@
+{
+  "name": "@ramp/root",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "private": true,
+  "workspaces": [
+    "./packages/*"
+  ],
+  "scripts": {
+    "web": "npm -w @ramp/web",
+    "i18n": "npm -w @ramp/i18n",
+    "utils": "npm -w @ramp/utils",
+    "generators": "npm -w @ramp/generators",
+    "start": "npm run start -w @ramp/web",
+    "build": "npm run build -w @ramp/web",
+    "test": "npm run test -w @ramp/web",
+    "sync:i18n": "npm run sync -w @ramp/i18n",
+    "generate": "npm generators @ramp/start",
+    "lint": "eslint packages -c ./.eslintrc.js --ext js,jsx,ts,tsx --fix --max-warnings=0",
+    "prettier": "prettier --write \"packages/**/*.{js,jsx,ts,tsx,json,md}\""
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "emotion": "11.0.0",
+    "typescript": "4.8.2"
+  },
+  "devDependencies": {
+    "@craco/craco": "^7.1.0",
+    "@craco/types": "^7.1.0",
+    "cz-conventional-changelog": "3.3.0",
+    "globals": "^15.2.0",
+    "husky": "8.0.1",
+    "lint-staged": "13.0.3",
+    "prettier": "2.7.1",
+    "typescript-eslint": "^7.9.0"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "linters": {
+      "*.{js,jsx,ts,tsx,json}": [
+        "npm run prettier",
+        "npm run lint",
+        "git add"
+      ]
+    },
+    "ignore": [
+      "*.json"
+    ]
+  },
+  "config": {
+    "commitizen": {
+      "path": "cz-conventional-changelog"
+    }
+  }
+}
