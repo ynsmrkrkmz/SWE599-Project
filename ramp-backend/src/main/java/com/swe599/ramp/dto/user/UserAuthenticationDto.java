@@ -1,4 +1,4 @@
-package com.swe599.ramp.response;
+package com.swe599.ramp.dto.user;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class AuthenticationResponse {
+public class UserAuthenticationDto {
+
     private String token;
 }

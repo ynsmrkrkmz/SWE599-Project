@@ -10,18 +10,23 @@ import java.util.Collection;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-@Data
+@Getter
+@Setter
+@ToString
 @Builder
 @Entity
 @Table(name = "users")
+@RequiredArgsConstructor
 @AllArgsConstructor
-@NoArgsConstructor
 public class User implements UserDetails {
 
     @Id

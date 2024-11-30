@@ -1,4 +1,4 @@
-package com.swe599.ramp.request.auth;
+package com.swe599.ramp.dto.user;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,10 +9,13 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class RegisterRequest {
+public class UserDto {
+
+    private Long id;
+
     private String name;
+
     private String lastname;
+
     private String email;
-    private String password;
-    private Integer role;
 }

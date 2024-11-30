@@ -1,9 +1,12 @@
 package com.swe599.ramp.service;
 
-import com.swe599.ramp.model.User;
+import com.swe599.ramp.dto.user.UserAuthenticationDto;
+import com.swe599.ramp.dto.user.UserAuthenticationRequestDto;
+import com.swe599.ramp.dto.user.UserCreateRequestDto;
+import com.swe599.ramp.dto.user.UserDto;
+import com.swe599.ramp.exceptions.UserAlreadyRegisteredException;
+import com.swe599.ramp.mapper.UserMapper;
 import com.swe599.ramp.repository.UserRepository;
-import com.swe599.ramp.request.auth.AuthenticationRequest;
-import com.swe599.ramp.request.auth.RegisterRequest;
 import com.swe599.ramp.service.jwt.JwtService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -19,31 +22,27 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
+    private final UserMapper userMapper;
 
-    public boolean register(RegisterRequest request) {
-        var user = User.builder()
-                .name(request.getName())
-                .lastname(request.getLastname())
-                .email(request.getEmail())
-                .password(passwordEncoder.encode(request.getPassword()))
-                .build();
+    public void register(UserCreateRequestDto request) {
+        var user = userMapper.toEntity(request, passwordEncoder);
 
-        if (userRepository.findByEmail(request.getEmail()).isEmpty()) {
-            userRepository.save(user);
+        if (userRepository.findByEmail(request.getEmail()).isPresent()) {
+            throw new UserAlreadyRegisteredException(request.getEmail());
         }
 
-        return true;
+        userRepository.save(user);
     }
 
-    public String authenticate(AuthenticationRequest request) {
+    public UserAuthenticationDto authenticate(UserAuthenticationRequestDto request) {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
-                request.getEmail(),
-                request.getPassword()));
+            request.getEmail(),
+            request.getPassword()));
         var user = userRepository.findByEmail(request.getEmail()).orElseThrow();
-        return jwtService.generateToken(user);
+        return userMapper.toAuthenticationDto(jwtService.generateToken(user));
     }
 
-    public User getUserDetails(Long userId) {
-        return userRepository.getReferenceById(userId);
+    public UserDto getUserDetails(Long userId) {
+        return userMapper.toDto(userRepository.getReferenceById(userId));
     }
 }

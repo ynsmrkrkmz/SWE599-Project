@@ -1,4 +1,4 @@
-package com.swe599.ramp.response;
+package com.swe599.ramp.dto.user;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,9 +9,9 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserResponse {
-    private Long id;
-    private String name;
-    private String lastname;
+public class UserAuthenticationRequestDto {
+
     private String email;
+
+    private String password;
 }

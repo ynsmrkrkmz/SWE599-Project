@@ -1,17 +1,23 @@
 package com.swe599.ramp.model;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.MappedSuperclass;
+import java.time.OffsetDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 
-import java.time.*;
-
-@Data
+@Getter
+@Setter
+@ToString
 @SuperBuilder
-@NoArgsConstructor
+@RequiredArgsConstructor
 @AllArgsConstructor
 @MappedSuperclass
 public abstract class BaseEntity {
@@ -30,8 +36,4 @@ public abstract class BaseEntity {
 
     @Column(name = "updated_at")
     private OffsetDateTime updatedAt;
-
-    @Builder.Default
-    @Column(name = "deleted", nullable = false)
-    private Boolean deleted = false;
 }
