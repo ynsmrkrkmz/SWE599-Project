@@ -25,11 +25,12 @@ public class AuthService {
     private final UserMapper userMapper;
 
     public void register(UserCreateRequestDto request) {
-        var user = userMapper.toEntity(request, passwordEncoder);
 
         if (userRepository.findByEmail(request.getEmail()).isPresent()) {
             throw new UserAlreadyRegisteredException(request.getEmail());
         }
+
+        var user = userMapper.toEntity(request, passwordEncoder);
 
         userRepository.save(user);
     }

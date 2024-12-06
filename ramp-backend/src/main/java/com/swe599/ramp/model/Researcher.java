@@ -28,12 +28,18 @@ public class Researcher extends BaseEntity {
     @Column(name = "id", nullable = false)
     private Long id;
 
+    @Column(name = "open_alex_id", nullable = false)
+    private String openAlexId;
+
+    @Column(name = "orc_id", nullable = true)
+    private String orcId;
+
     @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "institution", nullable = false)
+    @Column(name = "institution", nullable = true)
     private String institution;
 
-    @Column(name = "institution_country", nullable = false)
+    @Column(name = "institution_country", nullable = true)
     private String institutionCountry;
 }
