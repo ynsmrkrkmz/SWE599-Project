@@ -38,21 +38,6 @@ public class Stat extends BaseEntity {
     @Exclude
     private Researcher researcher;
 
-    @Column(name = "result_count", nullable = false)
-    private Integer resultCount;
-
-    @Column(name = "year", nullable = false, columnDefinition = "text")
-    private String year;
-
-    @Column(name = "open_access", nullable = false, columnDefinition = "text")
-    private String openAccess;
-
-    @Column(name = "topic", nullable = false, columnDefinition = "text")
-    private String topic;
-
-    @Column(name = "institution", nullable = false, columnDefinition = "text")
-    private String institution;
-
-    @Column(name = "type", nullable = false, columnDefinition = "text")
-    private String type;
+    @Column(name = "citation_per_year", nullable = false, columnDefinition = "text")
+    private String citationPerYear;
 }
