@@ -9,24 +9,22 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import java.time.OffsetDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.ToString.Exclude;
-import lombok.experimental.SuperBuilder;
 
 @Getter
 @Setter
 @ToString
-@SuperBuilder
 @Entity
 @Table(name = "stat")
 @RequiredArgsConstructor
 @AllArgsConstructor
-public class Stat extends BaseEntity {
+public class Stat {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -40,4 +38,7 @@ public class Stat extends BaseEntity {
 
     @Column(name = "citation_per_year", nullable = false, columnDefinition = "text")
     private String citationPerYear;
+
+    @Column(name = "data_date", nullable = false)
+    private OffsetDateTime dataDate;
 }

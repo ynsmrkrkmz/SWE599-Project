@@ -1,32 +1,28 @@
+import LoadingButton from '@mui/lab/LoadingButton';
 import {
   Box,
   Card,
   CardContent,
   CardHeader,
-  Checkbox,
   Divider,
   FormControl,
-  FormControlLabel,
   Grid,
   Link,
   Stack,
   TextField,
   Typography,
 } from '@mui/material';
-import LoadingButton from '@mui/lab/LoadingButton';
 import PasswordField from 'components/PasswordField';
-import { FC, useEffect, useState } from 'react';
-import { useIntl } from 'react-intl';
 import { useAppContext } from 'contexts/AppContext';
-import { useAuthContext } from 'contexts/AuthContext';
-import { useNavigate } from 'react-router-dom';
 import useFormResolver from 'hooks/useFormResolver';
+import useNotification from 'hooks/useNotification';
+import { FC, useEffect } from 'react';
 import { FieldValues, useForm } from 'react-hook-form';
+import { useIntl } from 'react-intl';
+import { useNavigate } from 'react-router-dom';
+import { useSignup } from 'services/userService';
 import { SignupFormInputSchema } from 'types/userTypes';
 import zxcvbn from 'zxcvbn';
-import useHandleError from 'hooks/useHandleError';
-import { useSignup } from 'services/userService';
-import useNotification from 'hooks/useNotification';
 
 const Signup: FC = () => {
   const intl = useIntl();
@@ -121,23 +117,25 @@ const Signup: FC = () => {
               </Grid>
               <Grid item xs={12}>
                 <PasswordField
+                  id="password"
                   fullWidth
                   showStrengthBar
                   strengthScore={watch('password') ? zxcvbn(watch('password')).score : 0}
                   label={intl.formatMessage({ id: 'generic.password' })}
                   disabled={isLoading}
                   error={!!errors.password}
-                  inputProps={register('password')}
+                  inputProps={{ ...register('password'), 'data-testid': 'password-field' }}
                   helperText={errors.password && `* ${errors.password.message}`}
                 />
               </Grid>
               <Grid item xs={12}>
                 <PasswordField
+                  id="confirm"
                   fullWidth
                   label={intl.formatMessage({ id: 'generic.confirmPassword' })}
                   disabled={isLoading}
                   error={!!errors.confirm}
-                  inputProps={register('confirm')}
+                  inputProps={{ ...register('confirm'), 'data-testid': 'confirm-field' }}
                   helperText={errors.confirm && `* ${errors.confirm.message}`}
                 />
               </Grid>

@@ -7,5 +7,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ResearcherRepository extends JpaRepository<Researcher, Long> {
+
     Optional<Researcher> findByOpenAlexId(String openAlexId);
 }

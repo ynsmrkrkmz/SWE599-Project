@@ -11,17 +11,15 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-import lombok.experimental.SuperBuilder;
 
 @Getter
 @Setter
 @ToString
-@SuperBuilder
 @Entity
 @Table(name = "researcher")
 @RequiredArgsConstructor
 @AllArgsConstructor
-public class Researcher extends BaseEntity {
+public class Researcher {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

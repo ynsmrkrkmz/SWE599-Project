@@ -9,22 +9,19 @@ import jakarta.persistence.MapsId;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.ToString.Exclude;
-import lombok.experimental.SuperBuilder;
 
 @Getter
 @Setter
 @ToString
-@SuperBuilder
 @Entity
 @Table(name = "researcher_list_membership")
 @RequiredArgsConstructor
 @AllArgsConstructor
-public class ResearcherListMembership extends BaseEntity {
+public class ResearcherListMembership {
 
     @EmbeddedId
     private ResearcherListMembershipId id;

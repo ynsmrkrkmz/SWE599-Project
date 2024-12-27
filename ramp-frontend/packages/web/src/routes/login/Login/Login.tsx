@@ -78,11 +78,12 @@ const Login: FC = () => {
               </Grid>
               <Grid item xs={12}>
                 <PasswordField
+                  id="password"
                   fullWidth
                   label={intl.formatMessage({ id: 'generic.password' })}
                   disabled={isSigninLoading}
                   error={!!errors.password}
-                  inputProps={register('password')}
+                  inputProps={{ ...register('password'), 'data-testid': 'password-field' }}
                   helperText={errors.password && `* ${errors.password.message}`}
                 />
               </Grid>

@@ -25,7 +25,7 @@ public class ResearcherController {
     @PostMapping
     public ResponseEntity<Object> create(@RequestBody ResearcherCreateRequestDto request) {
 
-        researcherService.create(request);
+        researcherService.addResearcher(request);
 
         return ResponseHandler.generateResponse("User registered successfully", HttpStatus.OK,
             null);

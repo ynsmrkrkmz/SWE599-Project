@@ -2,27 +2,28 @@ package com.swe599.ramp.model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-import lombok.experimental.SuperBuilder;
+import lombok.ToString.Exclude;
 
 @Getter
 @Setter
 @ToString
-@SuperBuilder
 @Entity
 @Table(name = "researcher_list")
 @RequiredArgsConstructor
 @AllArgsConstructor
-public class ResearcherList extends BaseEntity {
+public class ResearcherList {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -31,4 +32,9 @@ public class ResearcherList extends BaseEntity {
 
     @Column(name = "name", nullable = false)
     private String name;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "created_by", nullable = false)
+    @Exclude
+    private User createdBy;
 }
