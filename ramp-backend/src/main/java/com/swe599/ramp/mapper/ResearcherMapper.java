@@ -27,5 +27,6 @@ public interface ResearcherMapper {
     ResearcherListDto toResearcherListDto(ResearcherList researcherList);
 
     @Mapping(target = "name", source = "requestDto.name")
+    @Mapping(target = "createdBy", source = "createdBy")
     ResearcherList toResearcherListEntity(ResearcherListCreateRequestDto requestDto, User createdBy);
 }

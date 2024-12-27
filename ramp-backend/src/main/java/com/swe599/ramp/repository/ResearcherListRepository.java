@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ResearcherListRepository extends JpaRepository<ResearcherList, Long> {
 
-    Optional<ResearcherList> findByNameAndCreatedBy(String name, Long createdBy);
+    Optional<ResearcherList> findByNameAndCreatedById(String name, Long createdById);
 
-    List<ResearcherList> findAllByCreatedBy(Long createdBy);
+    List<ResearcherList> findAllByCreatedById(Long createdById);
 }

@@ -1,8 +1,7 @@
 import refinePasswordStrength from '@ramp/utils/refinePasswordStrength';
-import { BaseEntity } from 'types';
 import { z } from 'zod';
 
-export type User = BaseEntity & {
+export type User = {
   id: number;
   name: string;
   lastname: string;

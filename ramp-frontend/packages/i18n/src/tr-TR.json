@@ -53,5 +53,12 @@
   "info.imageFieldPlaceholder": "Resim Url Adresi",
   "generic.home": "Anasayfa",
   "generic.dashboard": "Pano",
-  "researcher.list": "Araştırmacı Listesi"
+  "researcher.list": "Araştırmacı Listesi",
+  "generic.viewList": "Listeyi Görüntüle",
+  "info.noValueFound": "Hiçbir kayıt bulunamadı",
+  "researcher.newList": "Yeni Liste Ekle",
+  "generic.add": "Ekle",
+  "info.newResearcherListModal": "Yeni araştırması listesi için isim giriniz.",
+  "researcher.listName": "Araştırmacı Listesi Adı",
+  "success.researcherListAdded": "Yeni araştırmacı listesi başarıyla eklendi."
 }

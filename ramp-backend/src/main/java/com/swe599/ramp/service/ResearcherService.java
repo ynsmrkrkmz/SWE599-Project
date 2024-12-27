@@ -8,6 +8,7 @@ import com.swe599.ramp.dto.researcher.ResearcherStatsDto;
 import com.swe599.ramp.mapper.ResearcherMapper;
 import com.swe599.ramp.mapper.StatMapper;
 import com.swe599.ramp.model.Researcher;
+import com.swe599.ramp.model.ResearcherList;
 import com.swe599.ramp.model.ResearcherListMembership;
 import com.swe599.ramp.model.ResearcherListMembershipId;
 import com.swe599.ramp.model.User;
@@ -86,15 +87,18 @@ public class ResearcherService {
     public ResearcherListDto addResearcherList(ResearcherListCreateRequestDto requestDto,
         User createdBy) {
 
-        if (researcherListRepository.findByNameAndCreatedBy(requestDto.getName(), createdBy.getId())
+        if (researcherListRepository.findByNameAndCreatedById(requestDto.getName(),
+                createdBy.getId())
             .isPresent()) {
             throw new RuntimeException(
                 String.format("List with name %s is already exist", requestDto.getName()));
         }
 
+        ResearcherList researcherList = researcherMapper.toResearcherListEntity(requestDto,
+            createdBy);
+
         return researcherMapper.toResearcherListDto(
-            researcherListRepository.save(
-                researcherMapper.toResearcherListEntity(requestDto, createdBy)));
+            researcherListRepository.save(researcherList));
     }
 
     public ResearcherListDto getResearcherListById(Long id) {
@@ -102,8 +106,8 @@ public class ResearcherService {
             researcherListRepository.findById(id).orElseThrow());
     }
 
-    public List<ResearcherListDto> findAllByCreatedBy(Long createdBy) {
-        return researcherListRepository.findAllByCreatedBy(createdBy).stream()
+    public List<ResearcherListDto> getAllResearcherList(Long createdById) {
+        return researcherListRepository.findAllByCreatedById(createdById).stream()
             .map(researcherMapper::toResearcherListDto).toList();
     }
 }
