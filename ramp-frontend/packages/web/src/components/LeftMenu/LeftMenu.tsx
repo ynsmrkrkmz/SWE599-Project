@@ -22,8 +22,8 @@ const LeftMenu: FC = () => {
   return (
     <Box sx={{ minWidth: '256px', maxWidth: 360, height: '100vh' }}>
       <List disablePadding>
-        {menuItems.map((item) => (
-          <ListItem disablePadding>
+        {menuItems.map((item, index) => (
+          <ListItem key={index} disablePadding>
             <ListItemButton
               onClick={() => navigate(`.${item.path}`)}
               selected={isActive(item.path)}

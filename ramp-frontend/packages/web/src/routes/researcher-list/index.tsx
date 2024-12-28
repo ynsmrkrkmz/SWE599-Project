@@ -3,6 +3,7 @@ import { FC, useEffect } from 'react';
 import { useIntl } from 'react-intl';
 import { Route, Routes } from 'react-router-dom';
 import ResearcherList from './routes/ResearcherList';
+import ResearcherListDetail from './components/ResearcherListDetail';
 
 const ResearcherListRoute: FC = () => {
   const { setPageName } = useAppContext();
@@ -15,7 +16,7 @@ const ResearcherListRoute: FC = () => {
   return (
     <Routes>
       <Route index element={<ResearcherList />} />
-      <Route path=":researcherListId" element={'Reseacrher List Details'}></Route>
+      <Route path=":researcherListId" element={<ResearcherListDetail />}></Route>
     </Routes>
   );
 };

@@ -21,3 +21,22 @@ export const ResearcherListCreateRequestSchema = z.object({
 });
 
 export type ResearcherListCreateRequest = z.infer<typeof ResearcherListCreateRequestSchema>;
+
+export type ResearcherListDetail = ResearcherList & {
+  researchers: Researcher[];
+};
+
+export const ResearcherSearchSchema = z.object({
+  researcherName: z.string().min(1, { message: 'error.fieldCantBeBlank' }),
+});
+
+export type ResearcherSearch = z.infer<typeof ResearcherSearchSchema>;
+
+export type ResearcherListMembershipCreateRequest = {
+  researcherListId: number;
+  openAlexId: string;
+  orcId: string;
+  name: string;
+  institution: string;
+  institutionCountry: string;
+};

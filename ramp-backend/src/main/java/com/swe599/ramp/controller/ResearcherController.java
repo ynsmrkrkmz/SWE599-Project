@@ -11,7 +11,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -65,5 +67,25 @@ public class ResearcherController {
         return ResponseHandler.generateResponse("Researcher List is added successfully",
             HttpStatus.OK,
             researcherService.addResearcherList(requestDto, authUser));
+    }
+
+    @GetMapping("researcher-list/{id}")
+    public ResponseEntity<Object> getResearcherListDetail(@PathVariable("id") Long listId) {
+
+        return ResponseHandler.generateResponse("Researcher List details fetched successfully",
+            HttpStatus.OK,
+            researcherService.getResearcherListByDetailId(listId));
+    }
+
+    @DeleteMapping("remove-from-list")
+    public ResponseEntity<Object> removeResearcherFromList(
+        @RequestParam("researcherId") Long researcherId, @RequestParam("listId") Long listId) {
+
+        researcherService.removeResearcherFromList(researcherId, listId);
+
+        return ResponseHandler.generateResponse(
+            "Researcher has been removed from list successfully",
+            HttpStatus.OK,
+            null);
     }
 }

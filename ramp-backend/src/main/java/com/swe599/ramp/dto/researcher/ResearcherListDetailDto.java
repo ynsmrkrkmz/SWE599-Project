@@ -1,5 +1,7 @@
 package com.swe599.ramp.dto.researcher;
 
+import com.swe599.ramp.dto.user.UserDto;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -9,17 +11,13 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class ResearcherCreateRequestDto {
+public class ResearcherListDetailDto {
 
-    private Long researcherListId;
-
-    private String openAlexId;
-
-    private String orcId;
+    private Long id;
 
     private String name;
 
-    private String institution;
+    private UserDto createdBy;
 
-    private String institutionCountry;
+    private List<ResearcherDto> researchers;
 }

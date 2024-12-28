@@ -60,5 +60,14 @@
   "generic.add": "Ekle",
   "info.newResearcherListModal": "Yeni araştırması listesi için isim giriniz.",
   "researcher.listName": "Araştırmacı Listesi Adı",
-  "success.researcherListAdded": "Yeni araştırmacı listesi başarıyla eklendi."
+  "success.researcherListAdded": "Yeni araştırmacı listesi başarıyla eklendi.",
+  "generic.openAlexId": "Open Alex Kimliği",
+  "generic.institution": "Akademik Kurum",
+  "generic.country": "Ülke",
+  "researcher.name": "Araştırmacı Adı",
+  "researcher.listDetail": "Araştırmacı Listesi Detayı",
+  "generic.search": "Ara",
+  "researcher.removeFromListWarnContent": "Bu araştırmacı listeden çıkarılacak.",
+  "success.researcherAddedToList": "Araştımacı listeye başarıyla eklendi",
+  "success.researcherRemovedFromList": "Araştımacı listeden başarıyla çıkarıldı"
 }

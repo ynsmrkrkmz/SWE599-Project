@@ -11,5 +11,5 @@ import org.springframework.stereotype.Repository;
 public interface ResearcherListMembershipRepository extends
     JpaRepository<ResearcherListMembership, ResearcherListMembershipId> {
 
-    List<Researcher> findAllByResearcherListId(Long researcherListId);
+    List<ResearcherListMembership> findAllByResearcherListId(Long researcherListId);
 }

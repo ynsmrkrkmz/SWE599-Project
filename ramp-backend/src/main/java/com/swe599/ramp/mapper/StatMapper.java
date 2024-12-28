@@ -17,7 +17,9 @@ public interface StatMapper {
 
     StatMapper INSTANCE = Mappers.getMapper(StatMapper.class);
 
+    @Mapping(target = "id", ignore = true)
     @Mapping(source = "citationCountPerYear", target = "citationPerYear", qualifiedByName = "mapToString")
+    @Mapping(target = "researcher", source = "researcher")
     Stat toEntity(Researcher researcher,
         Map<Integer, Integer> citationCountPerYear, OffsetDateTime dataDate);
 

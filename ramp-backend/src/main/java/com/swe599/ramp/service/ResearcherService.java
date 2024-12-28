@@ -3,6 +3,7 @@ package com.swe599.ramp.service;
 import com.swe599.ramp.dto.researcher.ResearcherCreateRequestDto;
 import com.swe599.ramp.dto.researcher.ResearcherDto;
 import com.swe599.ramp.dto.researcher.ResearcherListCreateRequestDto;
+import com.swe599.ramp.dto.researcher.ResearcherListDetailDto;
 import com.swe599.ramp.dto.researcher.ResearcherListDto;
 import com.swe599.ramp.dto.researcher.ResearcherStatsDto;
 import com.swe599.ramp.mapper.ResearcherMapper;
@@ -11,6 +12,7 @@ import com.swe599.ramp.model.Researcher;
 import com.swe599.ramp.model.ResearcherList;
 import com.swe599.ramp.model.ResearcherListMembership;
 import com.swe599.ramp.model.ResearcherListMembershipId;
+import com.swe599.ramp.model.Stat;
 import com.swe599.ramp.model.User;
 import com.swe599.ramp.repository.ResearcherListMembershipRepository;
 import com.swe599.ramp.repository.ResearcherListRepository;
@@ -19,6 +21,8 @@ import com.swe599.ramp.repository.StatRepository;
 import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -38,16 +42,37 @@ public class ResearcherService {
     @Transactional
     public void addResearcher(ResearcherCreateRequestDto researcherCreateRequestDto) {
 
-        if (researcherRepository.findByOpenAlexId(researcherCreateRequestDto.getOpenAlexId())
-            .isEmpty()) {
+        Optional<Researcher> researcher = researcherRepository.findByOpenAlexId(
+            researcherCreateRequestDto.getOpenAlexId());
+
+        if (researcher.isEmpty()) {
 
             Researcher created = researcherRepository.save(
                 researcherMapper.toEntity(researcherCreateRequestDto));
 
-            statRepository.save(statMapper.toEntity(created,
+            researcher = Optional.of(created);
+
+            Stat stat = statMapper.toEntity(created,
                 openAlexService.citationPerYearByAuthorReactive(
-                    researcherCreateRequestDto.getOpenAlexId()).block(), OffsetDateTime.now()));
+                    researcherCreateRequestDto.getOpenAlexId()).block(), OffsetDateTime.now());
+
+            statRepository.save(stat);
         }
+
+        ResearcherListMembershipId id = new ResearcherListMembershipId();
+        id.setResearcherId(researcher.get().getId());
+        id.setResearcherListId(researcherCreateRequestDto.getResearcherListId());
+
+        ResearcherList researcherList = researcherListRepository.findById(
+            researcherCreateRequestDto.getResearcherListId()).orElseThrow();
+
+        ResearcherListMembership researcherListMembership = new ResearcherListMembership();
+        researcherListMembership.setId(id);
+        researcherListMembership.setResearcher(researcher.get());
+        researcherListMembership.setResearcherList(researcherList);
+
+        researcherListMembershipRepository.save(researcherListMembership);
+
     }
 
     public void removeResearcherFromList(Long researcherId, Long researcherListId) {
@@ -63,11 +88,6 @@ public class ResearcherService {
 
     public ResearcherDto getResearcherById(Long id) {
         return researcherMapper.toDto(researcherRepository.findById(id).orElseThrow());
-    }
-
-    public List<ResearcherDto> findAllByResearcherListId(Long id) {
-        return researcherListMembershipRepository.findAllByResearcherListId(id).stream()
-            .map(researcherMapper::toDto).toList();
     }
 
     public List<ResearcherDto> findAll() {
@@ -101,9 +121,18 @@ public class ResearcherService {
             researcherListRepository.save(researcherList));
     }
 
-    public ResearcherListDto getResearcherListById(Long id) {
-        return researcherMapper.toResearcherListDto(
-            researcherListRepository.findById(id).orElseThrow());
+    @Transactional
+    public ResearcherListDetailDto getResearcherListByDetailId(Long id) {
+
+        ResearcherList researcherList = researcherListRepository.findById(id).orElseThrow();
+
+        List<Researcher> researchers = researcherListMembershipRepository.findAllByResearcherListId(
+                id).stream()
+            .map(ResearcherListMembership::getResearcher)
+            .collect(Collectors.toList());
+        ;
+
+        return researcherMapper.toResearcherListDetailDto(researcherList, researchers);
     }
 
     public List<ResearcherListDto> getAllResearcherList(Long createdById) {
