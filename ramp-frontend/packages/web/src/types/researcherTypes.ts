@@ -40,3 +40,10 @@ export type ResearcherListMembershipCreateRequest = {
   institution: string;
   institutionCountry: string;
 };
+
+export interface ResearcherStats {
+  researcher: Researcher;
+  citationCountPerYear: Record<number, number>;
+  dataDate: string;
+  workCountInTopJournals: number;
+}

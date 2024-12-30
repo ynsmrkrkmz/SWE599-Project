@@ -2,6 +2,8 @@ import { useAppContext } from 'contexts/AppContext';
 import { FC, useEffect } from 'react';
 import { useIntl } from 'react-intl';
 import { Route, Routes } from 'react-router-dom';
+import Comparison from './routes/Comparison';
+import ComparisonDetail from './routes/ComparisonDetail';
 
 const DasboardRoute: FC = () => {
   const { setPageName } = useAppContext();
@@ -13,8 +15,8 @@ const DasboardRoute: FC = () => {
 
   return (
     <Routes>
-      <Route index element={'Dasboard List'} />
-      <Route path=":dashboardId" element={'Dasboard Details'}></Route>
+      <Route index element={<Comparison />} />
+      <Route path=":dashboardId" element={<ComparisonDetail />}></Route>
     </Routes>
   );
 };

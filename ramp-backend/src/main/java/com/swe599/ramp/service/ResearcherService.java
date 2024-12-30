@@ -1,5 +1,7 @@
 package com.swe599.ramp.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.swe599.ramp.dto.researcher.ResearcherCreateRequestDto;
 import com.swe599.ramp.dto.researcher.ResearcherDto;
 import com.swe599.ramp.dto.researcher.ResearcherListCreateRequestDto;
@@ -26,6 +28,8 @@ import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 @Service
 @RequiredArgsConstructor
@@ -53,7 +57,7 @@ public class ResearcherService {
             researcher = Optional.of(created);
 
             Stat stat = statMapper.toEntity(created,
-                openAlexService.citationPerYearByAuthorReactive(
+                openAlexService.fetchAndMapCitationsByAuthor(
                     researcherCreateRequestDto.getOpenAlexId()).block(), OffsetDateTime.now());
 
             statRepository.save(stat);
@@ -138,5 +142,88 @@ public class ResearcherService {
     public List<ResearcherListDto> getAllResearcherList(Long createdById) {
         return researcherListRepository.findAllByCreatedById(createdById).stream()
             .map(researcherMapper::toResearcherListDto).toList();
+    }
+
+    @Transactional
+    public void updateResearchersData(List<Researcher> researchers) {
+        List<String> openAlexIds = researchers.stream()
+            .map(Researcher::getOpenAlexId)
+            .toList();
+
+        // Fetch citations for authors and works in journal table concurrently
+        Flux<Map.Entry<String, Map<Integer, Integer>>> citationsFlux = openAlexService.fetchCitationsForAuthors(openAlexIds);
+        Flux<Map.Entry<String, Long>> worksCountFlux = openAlexService.countWorksInJournalTableForAuthors(openAlexIds);
+
+        // Combine both results
+        Flux.zip(
+            citationsFlux.collectMap(Map.Entry::getKey, Map.Entry::getValue), // Collect citations into a Map
+            worksCountFlux.collectMap(Map.Entry::getKey, Map.Entry::getValue) // Collect works count into a Map
+        ).subscribe(tuple -> {
+            Map<String, Map<Integer, Integer>> citations = tuple.getT1(); // Citations data
+            Map<String, Long> worksCount = tuple.getT2(); // Works count data
+
+            for (String openAlexId : openAlexIds) {
+                Researcher researcher = researchers.stream()
+                    .filter(r -> openAlexId.equals(r.getOpenAlexId()))
+                    .findFirst()
+                    .orElse(null);
+
+                if (researcher != null) {
+                    Stat researcherStat = statRepository.findByResearcherId(researcher.getId())
+                        .orElseThrow();
+
+                    // Update citationPerYear
+                    if (citations.containsKey(openAlexId)) {
+                        Map<Integer, Integer> citationData = citations.get(openAlexId);
+                        try {
+                            researcherStat.setCitationPerYear(
+                                new ObjectMapper().writeValueAsString(citationData));
+                        } catch (JsonProcessingException e) {
+                            throw new RuntimeException("Error serializing citation data", e);
+                        }
+                    }
+
+                    // Update works count in journal
+                    if (worksCount.containsKey(openAlexId)) {
+                        researcherStat.setWorkCountInTopJournals(worksCount.get(openAlexId));
+                    }
+
+                    researcherStat.setDataDate(OffsetDateTime.now());
+                    statRepository.save(researcherStat);
+                }
+            }
+        }, error -> {
+            System.err.println("Error updating researchers' data: " + error.getMessage());
+        });
+
+
+//        openAlexService.fetchCitationsForAuthors(openAlexIds)
+//            .subscribe(entry -> {
+//                String openAlexId = entry.getKey();
+//
+//                Researcher researcher = researchers.stream()
+//                    .filter(r -> openAlexId.equals(r.getOpenAlexId()))
+//                    .findFirst()
+//                    .orElse(null);
+//
+//                assert researcher != null;
+//                Stat researcherStat = statRepository.findByResearcherId(researcher.getId())
+//                    .orElseThrow();
+//
+//                Map<Integer, Integer> citations = entry.getValue();
+//
+//                try {
+//                    researcherStat.setCitationPerYear(
+//                        new ObjectMapper().writeValueAsString(citations));
+//                } catch (JsonProcessingException e) {
+//                    throw new RuntimeException(e);
+//                }
+//
+//                researcherStat.setDataDate(OffsetDateTime.now());
+//
+//                statRepository.save(researcherStat);
+//            }, error -> {
+//                System.err.println("Update data error: " + error.getMessage());
+//            });
     }
 }

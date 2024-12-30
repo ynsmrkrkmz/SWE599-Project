@@ -1,5 +1,6 @@
 package com.swe599.ramp.dto.researcher;
 
+import java.time.OffsetDateTime;
 import java.util.Map;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,5 +13,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ResearcherStatsDto {
 
-    Map<Integer, Integer> citationCountPerYear;
+    private ResearcherDto researcher;
+
+    private Map<Integer, Integer> citationCountPerYear;
+
+    private Long workCountInTopJournals;
+
+    private OffsetDateTime dataDate;
 }

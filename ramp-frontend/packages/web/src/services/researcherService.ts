@@ -53,7 +53,7 @@ export const useAddResearcherList = (options = {}) =>
 
 export const useGetResearcherListDetail = (listId: string | undefined, enabled = true) =>
   useQuery(
-    ['researcher-list-detail'],
+    ['researcher-list-detail', listId],
     async () => {
       return api.fetch<ResearcherListDetail>({
         url: `${baseUrl}/researcher-list/${listId}`,

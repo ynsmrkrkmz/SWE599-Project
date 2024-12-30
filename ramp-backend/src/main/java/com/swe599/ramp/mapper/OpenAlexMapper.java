@@ -54,7 +54,7 @@ public class OpenAlexMapper {
         return null;
     }
 
-    public Map<Integer, Integer> mapJsonToCitationPerYear(JsonNode jsonResponse){
+    public Map<Integer, Integer> mapJsonToCitationPerYear(JsonNode jsonResponse) {
         Map<Integer, Integer> citationCountPerYear = new HashMap<>();
 
         if (jsonResponse != null && jsonResponse.has("results")) {
@@ -74,5 +74,41 @@ public class OpenAlexMapper {
         }
 
         return citationCountPerYear;
+    }
+
+    public Map<Integer, Integer> mapJsonToCitationPerYearByAuthor(JsonNode jsonResponse) {
+        Map<Integer, Integer> citationCountPerYear = new HashMap<>();
+
+        if (jsonResponse != null && jsonResponse.has("counts_by_year")) {
+            for (JsonNode yearData : jsonResponse.get("counts_by_year")) {
+                int year = yearData.get("year").asInt();
+                int citedByCount = yearData.get("cited_by_count").asInt();
+
+                // Aggregate citation counts by year
+                citationCountPerYear.put(year,
+                    citationCountPerYear.getOrDefault(year, 0) + citedByCount);
+            }
+        }
+
+        return citationCountPerYear;
+    }
+
+    public List<String> getIssnsFromWork(JsonNode worksNode) {
+        List<String> issns = new ArrayList<>();
+
+        // Extract ISSNs from the JsonNode
+        for (JsonNode workNode : worksNode.get("results")) { // Assuming 'results' contains works
+            JsonNode issnArray = workNode.path("primary_location").path("source").path("issn");
+            if (issnArray.isArray()) {
+                // Add all ISSNs in the array to the set
+                for (JsonNode issnNode : issnArray) {
+                    if (!issnNode.isNull() && !issnNode.asText().isEmpty()) {
+                        issns.add(issnNode.asText());
+                    }
+                }
+            }
+        }
+
+        return issns;
     }
 }

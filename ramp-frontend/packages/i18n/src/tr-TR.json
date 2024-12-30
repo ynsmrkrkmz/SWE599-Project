@@ -69,5 +69,19 @@
   "generic.search": "Ara",
   "researcher.removeFromListWarnContent": "Bu araştırmacı listeden çıkarılacak.",
   "success.researcherAddedToList": "Araştımacı listeye başarıyla eklendi",
-  "success.researcherRemovedFromList": "Araştımacı listeden başarıyla çıkarıldı"
+  "success.researcherRemovedFromList": "Araştımacı listeden başarıyla çıkarıldı",
+  "comparison.dashboard": "Karşılaştırma Panosu",
+  "comparison.addNew": "Yeni Karşılaştırma Ekle",
+  "info.newComparisonModal": "Yeni karşılaştırma için isim giriniz.",
+  "comparison.name": "Karşılaştırma Adı",
+  "genetic.totalCitations": "Toplam Alıntılar",
+  "generic.mean": "Ortalama",
+  "generic.year": "Yıl",
+  "generic.citations": "Alıntılar",
+  "comparison.detail": "Karşılaştırma Detayı",
+  "comparison.dataDate": "Veri Tarihi",
+  "comparison.syncData": "Veriyi Eşitle",
+  "generic.totalTopWorks": "Toplam Top %25 Dergideki Çalışmalar",
+  "generic.topWorks": "Top Çalışmalar",
+  "success.comparisonDetailsUpdated": "Karşılaştırma listesi başarıyla güncellendi"
 }

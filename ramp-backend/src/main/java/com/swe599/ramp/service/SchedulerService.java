@@ -33,38 +33,9 @@ public class SchedulerService {
 
         List<Researcher> researchers = researcherRepository.findAll();
 
-        List<String> openAlexIds = researchers.stream()
-            .map(Researcher::getOpenAlexId)
-            .toList();
-
-        openAlexService.citationPerYearForAllAuthors(openAlexIds)
-            .subscribe(entry -> {
-                String openAlexId = entry.getKey();
-
-                Researcher researcher = researchers.stream()
-                    .filter(r -> openAlexId.equals(r.getOpenAlexId()))
-                    .findFirst()
-                    .orElse(null);
-
-                assert researcher != null;
-                Stat researcherStat = statRepository.findByResearcherId(researcher.getId())
-                    .orElseThrow();
-
-                Map<Integer, Integer> citations = entry.getValue();
-
-                try {
-                    researcherStat.setCitationPerYear(
-                        new ObjectMapper().writeValueAsString(citations));
-                } catch (JsonProcessingException e) {
-                    throw new RuntimeException(e);
-                }
-
-                researcherStat.setDataDate(OffsetDateTime.now());
-
-                statRepository.save(researcherStat);
-            }, error -> {
-                System.err.println("Nightly job error: " + error.getMessage());
-            });
+        researcherService.updateResearchersData(researchers);
     }
+
+
 }
 

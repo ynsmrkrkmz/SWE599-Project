@@ -21,10 +21,10 @@ import lombok.ToString.Exclude;
 @Setter
 @ToString
 @Entity
-@Table(name = "stat")
+@Table(name = "comparison")
 @RequiredArgsConstructor
 @AllArgsConstructor
-public class Stat {
+public class Comparison {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -32,16 +32,20 @@ public class Stat {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "researcher_id", nullable = false)
+    @JoinColumn(name = "researcher_list_one_id", nullable = false)
     @Exclude
-    private Researcher researcher;
+    private ResearcherList list1;
 
-    @Column(name = "citation_per_year", nullable = false, columnDefinition = "text")
-    private String citationPerYear;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "researcher_list_two_id", nullable = false)
+    @Exclude
+    private ResearcherList list2;
 
-    @Column(name = "work_count_in_top_journals", nullable = true)
-    private Long workCountInTopJournals;
+    @Column(name = "name", nullable = false, unique = true)
+    private String name;
 
-    @Column(name = "data_date", nullable = false)
-    private OffsetDateTime dataDate;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "created_by", nullable = false)
+    @Exclude
+    private User createdBy;
 }

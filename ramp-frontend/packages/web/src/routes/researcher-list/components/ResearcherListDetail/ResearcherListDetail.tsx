@@ -1,20 +1,30 @@
-import React, { useMemo, useState } from 'react';
+import AddIcon from '@mui/icons-material/Add';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import ClearIcon from '@mui/icons-material/Clear';
+import LoadingButton from '@mui/lab/LoadingButton';
 import {
   Box,
-  Typography,
-  TextField,
-  Button,
+  FormControl,
+  IconButton,
+  Paper,
   Table,
   TableBody,
   TableCell,
   TableContainer,
   TableHead,
   TableRow,
-  Paper,
-  FormControl,
-  IconButton,
+  TextField,
+  Typography,
 } from '@mui/material';
 import { GridActionsCellItem, GridColumns } from '@mui/x-data-grid';
+import { useQueryClient } from '@tanstack/react-query';
+import ConfirmationDialog from 'components/ComfirmationDialog';
+import ContentLoading from 'components/ContentLoading';
+import useFormResolver from 'hooks/useFormResolver';
+import useNotification from 'hooks/useNotification';
+import { useMemo, useState } from 'react';
+import { FieldValues, SubmitHandler, useForm } from 'react-hook-form';
+import { PiTrashBold } from 'react-icons/pi';
 import { useIntl } from 'react-intl';
 import { useParams } from 'react-router-dom';
 import {
@@ -23,23 +33,12 @@ import {
   useRemoveResearcherListMembership,
   useSearchAuthor,
 } from 'services/researcherService';
-import { PiTrashBold } from 'react-icons/pi';
-import ConfirmationDialog from 'components/ComfirmationDialog';
-import { StyledDataGrid } from './ResearcherListDetail.style';
-import LoadingButton from '@mui/lab/LoadingButton';
-import { FieldValues, SubmitHandler, useForm } from 'react-hook-form';
-import useFormResolver from 'hooks/useFormResolver';
 import {
   Researcher,
   ResearcherListMembershipCreateRequest,
   ResearcherSearchSchema,
 } from 'types/researcherTypes';
-import ContentLoading from 'components/ContentLoading';
-import useNotification from 'hooks/useNotification';
-import ClearIcon from '@mui/icons-material/Clear';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import AddIcon from '@mui/icons-material/Add';
-import { useQueryClient } from '@tanstack/react-query';
+import { StyledDataGrid } from './ResearcherListDetail.style';
 
 const ResearcherListDetail = () => {
   const intl = useIntl();
